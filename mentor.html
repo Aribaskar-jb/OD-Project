@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <title>Mentor</title>
+</head>
+<style>
+  body{
+        background-color: rgb(216, 216, 216) ;
+      }
+        #profilebtn,#logoutbtn{
+            padding:10px;
+            margin:10px;
+            margin-top:20px;
+            border-color: gray;
+            color:white;
+        }
+        #profilebtn:hover,#logoutbtn:hover{
+            background-color:transparent;
+            box-shadow: 3px 3px 3px #545959;
+           transition: 0.2s;
+        }
+        .bg{
+          background: rgb(2,0,36);
+          background: linear-gradient(90deg, rgba(2,0,36,1) 0%,  rgba(0,212,255,1) 94%);
+          color:white;
+        }
+.btn:active{
+    transform: scale(.95);
+    border-color: black;
+}
+        .login-card.card.w-75.mb-3.shadow.p-3.mb-5.bg-body-tertiary.rounded{
+            margin:auto;
+            position: relative;
+            top:2rem;
+            background-color: #f4f4f4;
+           display: none;
+        }
+        .login-card.card.w-75.mb-3.shadow.p-3.mb-5.bg-body-tertiary.rounded.view{
+          display: block;
+        }
+</style>
+<body>
+    <div class="collapse bg" id="navbarToggleExternalContent" data-bs-theme="dark">
+        <div class="bg p-4" >
+          <h5 class="text-body-emphasis h4"><span><svg style="position:relative; bottom:4px; margin-right:10px;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+              <path  d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+            </svg></span>Mentor</h5>
+        </div>
+      </div>
+      <nav class="navbar bg">
+        <div class="container-fluid">
+          <button id="profilebtn" class="btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span>Profile</span>
+          </button> 
+          <button id="logoutbtn" class="navbar-toggler " type="button">
+            <span style="font-weight: 400;" onclick="window.location.href='login.html'">Logout</span>
+          </button>
+      </div>
+    </nav>
+    <div>
+      <h2 style="text-align:center;margin-top:15px;">OD REQUESTS</h2>
+        <div id="oddetails" class="card m-5 w-75 mb-4 mx-auto shadow p-3 mb-5 bg-body-tertiary rounded">
+          <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Roll No</th>
+                  <th scope="col">Name</th>
+                  <th scoper="col">Subject</th>
+                  <th scope="col">From-To Date</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ods">
+                <td id="rollno"></td>
+                <td id="nam"></td>
+                <td id="purpose"></td>
+                <td>19-08-2022</td>
+                <td><button id="btn" class="btn btn-primary p-1">Accept</button>
+                <button id="btn" class="btn btn-primary p-1">Reject</button></td>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+      <script src="mentor.js"></script>
+</body>
+</html>
