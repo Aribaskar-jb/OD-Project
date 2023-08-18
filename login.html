@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form action="#">
+                <h1>Create Account</h1>
+                <!--<span> or use your email for registration</span>-->
+                <input type="text" placeholder="Name">
+                <input type="password" placeholder="Password">
+                <input type="email" placeholder="Email">
+                <button>Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form action="#">
+                <h1>Sign In</h1>
+                <!--<span> or use your account</span>-->
+                <input type="text" placeholder="Name">
+                <input type="password" placeholder="Password">
+                <input type="email" placeholder="Email">
+                <button>Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Hey Existing User</h1>
+                    <p> If you already have an account<br> Enter your login details</p>
+                    <button class="press" id="SignIn">Sign-In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hey New User</h1>
+                    <p> If you don't have an account <br>Create your account </p>
+                    <button class="press" id="SignUp">Sign-Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const signupbtn = document.getElementById("SignUp");
+        const signinbtn = document.getElementById("SignIn");
+        const container = document.getElementById("container");
+
+        signupbtn.addEventListener('click', ()=> {
+            container.classList.add("right-panel-active");
+        })
+        signinbtn.addEventListener('click', ()=> {
+            container.classList.remove("right-panel-active");
+        })
+
+    </script>
+</body>
+</html>
