@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Student</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
+      body{
+        background-color: rgb(216, 216, 216) ;
+      }
         #profilebtn,#logoutbtn{
             padding:10px;
             margin:10px;
             margin-top:20px;
             border-color: gray;
-            color:white
+            color:white;
         }
         #profilebtn:hover,#logoutbtn:hover{
-            background-color: gray;
-            color:black
+            background-color:transparent;
+            box-shadow: 3px 3px 3px #545959;
+           transition: 0.2s;
         }
         .login-card.card.w-75.mb-3.shadow.p-3.mb-5.bg-body-tertiary.rounded{
             margin:auto;
@@ -30,16 +34,27 @@
         #statusbtn{
           position: relative;
           top:20px;
+          background: rgb(2,0,36);
+          background: linear-gradient(90deg, rgba(2,0,36,1) 0%,  rgba(0,212,255,1) 94%);
+          color:white;
+          
         }
         #historybtn{
           position: relative;
           top: 20px;
+          background: rgb(2,0,36);
+          background: linear-gradient(90deg, rgba(2,0,36,1) 0%,  rgba(0,212,255,1) 94%);
+          color:white;
         }
         #applyodbtn{
           border-radius: 20px;
           position: relative;
           top:2rem;
           left:2rem;
+          background: rgb(2,0,36);
+          background: linear-gradient(90deg, rgba(2,0,36,1) 0%,  rgba(0,212,255,1) 94%);
+          color:white;
+          border: 0px;
         }
         .status-card.card.mt-2.shadow.p-3.mb-5.bg-body-tertiary.rounded{
           display: none; 
@@ -57,6 +72,17 @@
         .card.w-75.mb-4.mx-auto.shadow.p-3.mb-5.bg-body-tertiary.rounded.view{
           display: block;
         }
+        .bg{
+          background: rgb(2,0,36);
+          background: linear-gradient(90deg, rgba(2,0,36,1) 0%,  rgba(0,212,255,1) 94%);
+          color:white;
+        }
+        .btn-bg{
+          background-color: #011333;
+          color: grey;
+          transition: opacity 1s;
+          transition: red 1s;
+        }
     </style>
 </head>
 <body>
@@ -68,10 +94,10 @@
     <span class="text-body-secondary"></span>
   </div>
 </div>
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar bg">
   <div class="container-fluid">
-    <button id="profilebtn" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span>Profile</span>
+    <button  id="profilebtn" class="navbar-toggler btn-bg" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation" >
+        <span >Profile</span>
     </button> 
     <button id="logoutbtn" class="navbar-toggler " type="button">
         <span style="font-weight: 400;">Logout</span>
@@ -142,7 +168,7 @@
     </div>
   </div>
   <div>
-    <div class="d-grid col-6 mx-auto" id="statusbtn">
+    <div class="d-grid col-6 mx-auto">
       <button id="statusbtn" type="button" class="btn btn-info mb-4">View OD Status</button>
       <div class="status-card card mt-2 shadow p-3 mb-5 bg-body-tertiary rounded" id="statusbar">
         <div class="card-body  ">
@@ -167,7 +193,7 @@
   </div>
   </div>
 <div>
-  <div class="d-grid gap-2 col-6 mx-auto mb-4" id="historybtn">
+  <div class="d-grid gap-2 col-6 mx-auto mb-4" >
     <button id="historybtn" class="btn btn-info" type="button">History of OD</button>
   </div>
   <div id="history" class="card w-75 mb-4 mx-auto shadow p-3 mb-5 bg-body-tertiary rounded">
