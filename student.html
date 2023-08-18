@@ -1,0 +1,238 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <style>
+        #profilebtn,#logoutbtn{
+            padding:10px;
+            margin:10px;
+            margin-top:20px;
+            border-color: gray;
+            color:white
+        }
+        #profilebtn:hover,#logoutbtn:hover{
+            background-color: gray;
+            color:black
+        }
+        .login-card.card.w-75.mb-3.shadow.p-3.mb-5.bg-body-tertiary.rounded{
+            margin:auto;
+            position: relative;
+            top:2rem;
+            background-color: #f4f4f4;
+           display: none;
+        }
+        .login-card.card.w-75.mb-3.shadow.p-3.mb-5.bg-body-tertiary.rounded.view{
+          display: block;
+        }
+        #statusbtn{
+          position: relative;
+          top:20px;
+        }
+        #historybtn{
+          position: relative;
+          top: 20px;
+        }
+        #applyodbtn{
+          border-radius: 20px;
+          position: relative;
+          top:2rem;
+          left:2rem;
+        }
+        .status-card.card.mt-2.shadow.p-3.mb-5.bg-body-tertiary.rounded{
+          display: none; 
+         position: relative;
+          top:20px;;
+        }
+        .status-card.card.mt-2.shadow.p-3.mb-5.bg-body-tertiary.rounded.view{
+          display: block;
+        }
+        .card.w-75.mb-4.mx-auto.shadow.p-3.mb-5.bg-body-tertiary.rounded{
+          position: relative;
+          top:30px;  
+          display: none;
+        }
+        .card.w-75.mb-4.mx-auto.shadow.p-3.mb-5.bg-body-tertiary.rounded.view{
+          display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
+  <div class="bg-dark p-4">
+    <h5 class="text-body-emphasis h4"><span><svg style="position:relative; bottom:4px; margin-right:10px;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+        <path  d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+      </svg></span>20CSA40</h5>
+    <span class="text-body-secondary"></span>
+  </div>
+</div>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <button id="profilebtn" class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span>Profile</span>
+    </button> 
+    <!-- button id="profilebtn"class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">profile</button>
+
+<div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+  <div class="offcanvas-header">  
+    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">profile</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <p>Try scrolling the rest of the page to see this option in action.</p>
+  </div>
+</div> -->
+    <button id="logoutbtn" class="navbar-toggler " type="button">
+        <span style="font-weight: 400;">Logout</span>
+      </button>
+  </div>
+</nav>
+<div class="mx-auto mb-4">
+  <button id="applyodbtn" class="btn btn-info"><span id="plusicon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+  </svg></span> Apply For Od</button></div>
+<div id="applyod" class="login-card card w-75 mb-3 shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="card-body">
+      <div class="input-group mb-4">
+        <span class="input-group-text" id="basic-addon1">To:</span>
+        <input type="text" id="towhom" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-4">
+        <span class="input-group-text">Reason for OD:</span>
+        <textarea id="reasonforod" class="form-control" aria-label="With textarea"></textarea>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="input-group mb-4">
+            <label class="input-group-text" for="birthday">From Date:</label>
+          <input id="formdate" type="date" class="form-control" id="birthday" name="birthday">
+          </div>
+        </div>
+        <div class="col">
+          <div class="input-group mb-4">
+            <label class="input-group-text" for="birthday">To Date:</label>
+          <input id="todate" type="date" class="form-control" id="birthday" name="birthday">
+          </div>
+        </div>
+      </div>
+      <!-- <div class="btn-group mb-4">
+        <button id="year" type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Year
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" value="1" href="#">1st Year</a></li>
+          <li><a class="dropdown-item" value="2" href="#">2nd Year</a></li>
+          <li><a class="dropdown-item" value="3" href="#">3rd Year</a></li>
+          <li><a class="dropdown-item" value="4" href="#">4th Year</a></li>
+        </ul>
+      </div>
+      <div class="btn-group mb-4">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          Department
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">CSE</a></li>
+          <li><a class="dropdown-item" href="#">IT</a></li>
+          <li><a class="dropdown-item" href="#">ECE</a></li>
+          <li><a class="dropdown-item" href="#">AIDS</a></li>
+          <li><a class="dropdown-item" href="#">CSBS</a></li>
+          <li><a class="dropdown-item" href="#">MECH</a></li>
+        </ul>
+      </div> -->
+      <div class="row">
+        <div class="col">
+          <div class="input-group mb-4">
+            <label class="input-group-text" for="inputGroupSelect01">Year</label>
+            <select class="form-select" id="inputGroupSelect01">
+              <option value="1">1st Year</option>
+              <option value="2">2nd Year</option>
+              <option value="3">3rd Year</option>
+              <option value="4">4td Year</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="input-group mb-4">
+            <label class="input-group-text" for="inputGroupSelect01">Department</label>
+            <select class="form-select" id="inputGroupSelect02">
+              <option value="cse">CSE</option>
+              <option value="it">IT</option>
+              <option value="ece">ECE</option>
+              <option value="aids">AIDS</option>
+              <option value="csbs">CSBS</option>
+              <option value="mech">MECH</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="d-grid col-6 mx-auto">
+        <button id="odsubmit" class="btn btn-primary" type="button">Apply OD</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="d-grid col-6 mx-auto" id="statusbtn">
+      <button id="statusbtn" type="button" class="btn btn-info mb-4">View OD Status</button>
+      <div class="status-card card mt-2 shadow p-3 mb-5 bg-body-tertiary rounded" id="statusbar">
+        <div class="card-body  ">
+          <table class="table">
+            <thead>
+              <tr></tr>
+                <th scope="col">Mentor</th>
+                <th scope="col">Hod</th>
+                <th scope="col">Principal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Pending</td>
+                <td>Pending</td>
+                <td>Pending</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+  </div>
+  </div>
+<div>
+  <div class="d-grid gap-2 col-6 mx-auto mb-4" id="historybtn">
+    <button id="historybtn" class="btn btn-info" type="button">History of OD</button>
+  </div>
+  <div id="history" class="card w-75 mb-4 mx-auto shadow p-3 mb-5 bg-body-tertiary rounded">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Reason For Od</th>
+            <th scope="col">From-To Date</th>
+            <th scope="col">Year & Sec</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- <div id="history" class="d-gird gap-2 col-10 mx-auto" style="border: 1px solid black;">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Handle</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div> -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="./student.js"></script>
+</body>
+</html>
