@@ -1,74 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="login.css">
-</head>
-<body>
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
     <div class="container" id="container">
-        <div class="form-container sign-up-container">
-            <form action="#">
-                <h1>Create Account</h1>
-                <!--<span> or use your email for registration</span>-->
-                <input type="text" id="signuptext" placeholder="Name">
-                <input type="password" id="signuppassword" placeholder="Password">
-                <!-- <input type="email" placeholder="Email"> -->
-                <button id="usersignup">Sign Up</button>
-            </form>
+      <div class="form-container sign-up-container">
+        <form action="#">
+          <h1>Create Account</h1>
+          <!--<span> or use your email for registration</span>-->
+          <input type="text" id="signuptext" placeholder="Name" />
+          <input type="password" id="signuppassword" placeholder="Password" />
+          <!-- <input type="email" placeholder="Email"> -->
+          <button id="usersignup">Sign Up</button>
+        </form>
+      </div>
+      <div class="form-container sign-in-container">
+        <form action="#">
+          <h1>Sign In</h1>
+          <!--<span> or use your account</span>-->
+          <input type="text" id="signintext" placeholder="Name" />
+          <input type="password" id="signinpassword" placeholder="Password" />
+          <!-- <input type="email" placeholder="Email"> -->
+          <button id="usersignin">Sign In</button>
+        </form>
+      </div>
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Hey Existing User</h1>
+            <p>
+              If you already have an account<br />
+              Enter your login details
+            </p>
+            <button class="press" id="SignIn">Sign-In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Hey New User</h1>
+            <p>If you don't have an account <br />Create your account</p>
+            <button class="press" id="SignUp">Sign-Up</button>
+          </div>
         </div>
-        <div class="form-container sign-in-container">
-            <form action="#">
-                <h1>Sign In</h1>
-                <!--<span> or use your account</span>-->
-                <input type="text" id="signintext" placeholder="Name">
-                <input type="password" id="signinpassword" placeholder="Password">
-                <!-- <input type="email" placeholder="Email"> -->
-                <button id="usersignin">Sign In</button>
-            </form>
-        </div>
-        <div class="overlay-container">
-            <div class="overlay">
-                <div class="overlay-panel overlay-left">
-                    <h1>Hey Existing User</h1>
-                    <p> If you already have an account<br> Enter your login details</p>
-                    <button class="press" id="SignIn">Sign-In</button>
-                </div>
-                <div class="overlay-panel overlay-right">
-                    <h1>Hey New User</h1>
-                    <p> If you don't have an account <br>Create your account </p>
-                    <button class="press" id="SignUp">Sign-Up</button>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
     <script>
-        const signupbtn = document.getElementById("SignUp");
-        const signinbtn = document.getElementById("SignIn");
-        const container = document.getElementById("container");
+      const signupbtn = document.getElementById("SignUp");
+      const signinbtn = document.getElementById("SignIn");
+      const container = document.getElementById("container");
 
-        signupbtn.addEventListener('click', ()=> {
-            container.classList.add("right-panel-active");
-        })
-        signinbtn.addEventListener('click', ()=> {
-            container.classList.remove("right-panel-active");
-        })
-
-        document.getElementById("usersignup").addEventListener("click",(event)=>{
-            event.preventDefault();
-            let signupUsername=document.getElementById("signuptext").value
-            let signupPassword=document.getElementById("signuppassword").value
-            console.log(signupUsername,signupPassword)
-        })
-
-        document.getElementById("usersignin").addEventListener("click",(event)=>{
-            event.preventDefault();
-            let signinUsername=document.getElementById("signintext").value
-            let signinPassword=document.getElementById("signinpassword").value
-            console.log(signinUsername,signinPassword)
-        })
-
+      signupbtn.addEventListener("click", () => {
+        container.classList.add("right-panel-active");
+      });
+      signinbtn.addEventListener("click", () => {
+        container.classList.remove("right-panel-active");
+      });
     </script>
-</body>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-analytics.js";
+      import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCb5rHQgaeYJgHFapU_KkpSobPoWCezFhA",
+        authDomain: "od-project-b00da.firebaseapp.com",
+        projectId: "od-project-b00da",
+        storageBucket: "od-project-b00da.appspot.com",
+        messagingSenderId: "309156647421",
+        appId: "1:309156647421:web:ae8a858791f279acf14994",
+        measurementId: "G-6YBET1MVLK",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth();
+
+      document
+        .getElementById("usersignup")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          const signupUsername = document.getElementById("signuptext").value;
+          const signupPassword =
+            document.getElementById("signuppassword").value;
+          try {
+            const db = getFirestore(app);
+            const usersCollection = collection(db, "users");
+            const userDoc = await addDoc(usersCollection, {
+              username: signupUsername,
+              password: signupPassword,
+            });
+
+            console.log("User data stored in Firestore:", userDoc);
+          } catch (error) {
+            console.log("Signup error:", error);
+          }
+        });
+    </script>
+  </body>
 </html>
