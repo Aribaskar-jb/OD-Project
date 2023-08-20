@@ -102,15 +102,60 @@
             console.log("Signup error:", error);
           }
         });
+      
       document
         .getElementById("usersignin")
-        .addEventListener("click", async () => {
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          const userarr=[]
           try {
             const db=getFirestore(app);
             const data = await getDocs(collection(db, "users"));
+            let signinUsername=document.getElementById("signintext").value
+            let signinpassword=document.getElementById("signinpassword").value
             data.forEach((doc) => {
-              console.log(doc.data());
-            });
+              let data=doc.data()
+              let userdataname=data.username
+              let userdatapassword=data.password
+              /* console.log(doc.data());
+              console.log(userdataname,userdatapassword)
+              userarr.push({
+                "username":userdataname,
+                "password":userdatapassword
+              })  */
+              if(signinUsername==userdataname){
+                if(signinpassword==userdatapassword){
+                  if(signinUsername.includes("mentor")){
+                        window.location.href = 'mentor.html'
+                    }else if(signinUsername.includes("hod")){
+                        window.location.href = 'hod.html'
+                    }else if(signinUsername.includes("principal")){
+                        window.location.href = 'principal.html'
+                    }
+                    else{
+                        window.location.href = 'student.html'
+                    }
+                    document.getElementById("username").value=""
+                    document.getElementById("password").value=""
+                }
+                else
+                console.log("wrong")
+              }
+              
+            }
+  
+            );
+            /* console.log(userarr)
+            let signinUsername=document.getElementById("signintext").value
+            let signinpassword=document.getElementById("signinpassword").value
+            for(let i=0;i<userarr.length;i++){
+              if (signinUsername == userarr[i].username){
+                console.log("correct")
+              }
+              else{
+                console.log("false")
+              }
+            } */
           } catch (error) {
             console.log(error);
           }
