@@ -66,8 +66,8 @@
         getFirestore,
         collection,
         addDoc,
+        getDocs,
       } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
-
       const firebaseConfig = {
         apiKey: "AIzaSyCb5rHQgaeYJgHFapU_KkpSobPoWCezFhA",
         authDomain: "od-project-b00da.firebaseapp.com",
@@ -100,6 +100,19 @@
             console.log("User data stored in Firestore:", userDoc);
           } catch (error) {
             console.log("Signup error:", error);
+          }
+        });
+      document
+        .getElementById("usersignin")
+        .addEventListener("click", async () => {
+          try {
+            const db=getFirestore(app);
+            const data = await getDocs(collection(db, "users"));
+            data.forEach((doc) => {
+              console.log(doc.data());
+            });
+          } catch (error) {
+            console.log(error);
           }
         });
     </script>
