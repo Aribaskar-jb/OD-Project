@@ -104,15 +104,16 @@
   <button id="applyodbtn" class="btn btn-info"><span id="plusicon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
     <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
   </svg></span> Apply For Od</button></div>
-<div id="applyod" class="login-card card w-75 mb-3 shadow p-3 mb-5 bg-body-tertiary rounded">
+<form id="contents">
+  <div id="applyod" class="login-card card w-75 mb-3 shadow p-3 mb-5 bg-body-tertiary rounded">
     <div class="card-body">
       <div class="input-group mb-4">
         <span class="input-group-text" id="basic-addon1">Student Name:</span>
         <input type="text" id="studentname" class="form-control" placeholder="Student Name" aria-label="Username" aria-describedby="basic-addon1">
       </div>
       <div class="input-group mb-4">
-        <span class="input-group-text" id="basic-addon1">To:</span>
-        <input type="text" id="mentor" class="form-control" placeholder="Mentor Name" aria-label="Username" aria-describedby="basic-addon1">
+        <span class="input-group-text" id="basic-addon1">Roll no :</span>
+        <input type="text" id="rollno" class="form-control" placeholder="Roll no" aria-label="Username" aria-describedby="basic-addon1">
       </div>
       <div class="input-group mb-4">
         <span class="input-group-text">Reason for OD:</span>
@@ -121,22 +122,22 @@
       <div class="row">
         <div class="col">
           <div class="input-group mb-4">
-            <label class="input-group-text" for="birthday">From Date:</label>
-          <input id="formdate" type="date" class="form-control" id="birthday" name="birthday">
+            <label class="input-group-text" for="fromdate">From Date:</label>
+          <input id="fromdate" type="date" class="form-control">
           </div>
         </div>
         <div class="col">
           <div class="input-group mb-4">
-            <label class="input-group-text" for="birthday">To Date:</label>
-          <input id="todate" type="date" class="form-control" id="birthday" name="birthday">
+            <label class="input-group-text" for="todate">To Date:</label>
+          <input id="todate" type="date" class="form-control">
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col">
           <div class="input-group mb-4">
-            <label class="input-group-text" for="inputGroupSelect01">Year</label>
-            <select class="form-select" id="inputGroupSelect01">
+            <label class="input-group-text" for="studentYear">Year</label>
+            <select class="form-select" id="studentYear">
               <option value="1">1st Year</option>
               <option value="2">2nd Year</option>
               <option value="3">3rd Year</option>
@@ -146,8 +147,8 @@
         </div>
         <div class="col">
           <div class="input-group mb-4">
-            <label class="input-group-text" for="inputGroupSelect01">Department</label>
-            <select class="form-select" id="inputGroupSelect02">
+            <label class="input-group-text" for="studentDept">Department</label>
+            <select class="form-select" id="studentDept">
               <option value="cse">CSE</option>
               <option value="it">IT</option>
               <option value="ece">ECE</option>
@@ -163,6 +164,7 @@
       </div>
     </div>
   </div>
+</form>
   <div>
     <div class="d-grid col-6 mx-auto">
       <button id="statusbtn" type="button" class="btn btn-info mb-4">View OD Status</button>
@@ -210,5 +212,60 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 <script src="./student.js"></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-analytics.js";
+      import { getAuth } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyCb5rHQgaeYJgHFapU_KkpSobPoWCezFhA",
+        authDomain: "od-project-b00da.firebaseapp.com",
+        projectId: "od-project-b00da",
+        storageBucket: "od-project-b00da.appspot.com",
+        messagingSenderId: "309156647421",
+        appId: "1:309156647421:web:ae8a858791f279acf14994",
+        measurementId: "G-6YBET1MVLK",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const auth = getAuth();
+
+      document
+        .getElementById("odsubmit")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          const form = document.getElementById("contents");
+          const studentname = document.getElementById("studentname").value;
+          const rollno = document.getElementById("rollno").value;
+          const reasonforod = document.getElementById("reasonforod").value;
+          const fromdate = document.getElementById("fromdate").value;
+          const todate = document.getElementById("todate").value;
+          const studentYear = document.getElementById("studentYear").value;
+          const studentDept = document.getElementById("studentDept").value;
+          try {
+            const db = getFirestore(app);
+            const usersCollection = collection(db, `mentor ${studentDept}`);
+            const userDoc = await addDoc(usersCollection, {
+              StudentName: studentname,
+              RollNo: rollno,
+              Reason: reasonforod,
+              OdFrom: fromdate,
+              To:todate,
+              CurrentYear:studentYear,
+            });
+
+            console.log("User data stored in Firestore:", userDoc);
+            form.reset();
+          } catch (error) {
+            console.log("Upload error:", error);
+          }
+        });
+</script>
 </body>
 </html>
