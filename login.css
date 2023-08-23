@@ -135,7 +135,6 @@ button:active{
 button.press{
     background-color: transparent;
     border-color: white;
-
 }
 p{
     font-size: 14px;
@@ -165,18 +164,14 @@ p{
 }
 .container.right-panel-active .overlay-container{
     transform: translateX(-100%);
-
 }
 .container.right-panel-active .overlay{
     transform: translateX(50%);
-
 }
 .container.right-panel-active .overlay-left{
     transform: translateX(0);
-
 }
 .container.right-panel-active .overlay-right{
     transform: translateX(20%);
-
 }
 

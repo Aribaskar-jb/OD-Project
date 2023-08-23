@@ -103,18 +103,21 @@
               appId: "1:309156647421:web:ae8a858791f279acf14994",
               measurementId: "G-6YBET1MVLK",
             };
-      
+
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
             const auth = getAuth();
       
-            const fetchData = async (event) => {
+            window.addEventListener('load',async (event) => {
               try {
                 const db=getFirestore(app);
+
                 const data = await getDocs(collection(db, "mentor cse"));
+               
                 let bodyInsert=document.getElementById("studentReq")
                 data.forEach((doc) => {
                   let data=doc.data()
+                  let dataid = doc.id;
                   let studentname=data.StudentName
                   let rollNo=data.RollNo 
                   let odReason=data.Reason 
@@ -126,18 +129,63 @@
                       <td>${odReason}</td>
                       <td>${fromDate}</td>
                       <td>
-                          <button id="accept" class="btn btn-outline-primary p-1">Accept</button>
+                          <button  id="accept" class="btn btn-outline-primary p-1" docid="${doc.id}">Accept</button>
                           <button class="btn btn-outline-primary p-1">Reject</button>
                       </td>
                   </tr>
                   `
                   bodyInsert.innerHTML+=temp;
+                  var accept = document.getElementById("accept")
+                  accept.addEventListener('click', async()=>{
+                    console.log("hello")
+                    const usersCollection = collection(db, `hod ${studentDept}`);
+            const userDoc = await addDoc(usersCollection, {
+              StudentName: studentname,
+              RollNo: rollno,
+              Reason: reasonforod,
+              OdFrom: fromdate,
+              To:todate,
+              CurrentYear:studentYear,
+              dept : studentDept,
+              mentor:"accepted",
+              hod:"pending",
+              principal:"pending"
+            });
+                  })
+
+
+
                   });
                } catch (error) {
             console.log("retrieve error:", error);
           }
-        };
-        fetchData();
+
+        });
+        
+
+
+        /* function calldata(){
+          try {
+            const db = getFirestore(app);
+            const usersCollection = collection(db, "hod cse");
+            const userDoc = addDoc(usersCollection, {
+              StudentName: studentname,
+              RollNo: rollno,
+              Reason: reasonforod,
+              OdFrom: fromdate, 
+              To:todate,
+              CurrentYear:studentYear,
+            });
+
+            console.log("User data stored in Firestore:", userDoc);
+            form.reset();
+          } catch (error) {
+            console.log("Upload error:", error);
+          }
+        };calldata();
+   */
+      
+      
     </script>
 </body>
 </html>

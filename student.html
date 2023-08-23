@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student</title>
+    <!-- ... inside your <head> tag ... -->
+<!-- ... rest of your <head> tag ... -->
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
       body{
@@ -222,6 +225,7 @@
         addDoc,
         getDocs,
       } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
+      import {set,ref,getDatabase} from "https://www.gstatic.com/firebasejs/9.0.1/firebase-database.js"
       const firebaseConfig = {
         apiKey: "AIzaSyCb5rHQgaeYJgHFapU_KkpSobPoWCezFhA",
         authDomain: "od-project-b00da.firebaseapp.com",
@@ -240,6 +244,7 @@
         .getElementById("odsubmit")
         .addEventListener("click", async (event) => {
           event.preventDefault();
+          let id;
           const form = document.getElementById("contents");
           const studentname = document.getElementById("studentname").value;
           const rollno = document.getElementById("rollno").value;
@@ -250,17 +255,47 @@
           const studentDept = document.getElementById("studentDept").value;
           try {
             const db = getFirestore(app);
-            const usersCollection = collection(db, `mentor ${studentDept}`);
-            const userDoc = await addDoc(usersCollection, {
-              StudentName: studentname,
-              RollNo: rollno,
-              Reason: reasonforod,
-              OdFrom: fromdate,
-              To:todate,
-              CurrentYear:studentYear,
+            const db1 = getDatabase(app);
+            const data = await getDocs(collection(db, "users"));
+            data.forEach(async info=> {
+              console.log(info.id)
+              let dataset=info.data()
+              let lent=dataset.username.length;
+              console.log(lent)
+              let name=document.cookie.slice(0,lent)
+              console.log(dataset.username,name)
+              if(dataset.username==name){
+                console.log("yes")
+                set(ref(db1, 'users/' + info.id), {
+  username: name,
+  password: "Ari_1515",
+  StudentName: studentname,
+  RollNo: rollno,
+  Reason: reasonforod,
+  OdFrom: fromdate,
+  To: todate,
+  CurrentYear: studentYear,
+  dept: studentDept,
+  mentor: "pending",
+  hod: "pending",
+  principal: "pending"
+});
+              }
             });
-
-            console.log("User data stored in Firestore:", userDoc);
+            // const usersCollection = collection(db, `mentor ${studentDept}`);
+            // const userDoc = await addDoc(usersCollection, {
+              // StudentName: studentname,
+              // RollNo: rollno,
+              // Reason: reasonforod,
+              // OdFrom: fromdate,
+              // To:todate,
+              // CurrentYear:studentYear,
+              // dept : studentDept,
+              // mentor:"pending",
+              // hod:"pending",
+              // principal:"pending"
+            // });
+            // console.log("User data stored in Firestore:", userDoc);
             form.reset();
           } catch (error) {
             console.log("Upload error:", error);

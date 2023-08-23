@@ -2,7 +2,7 @@
 const apply=document.getElementById("applyod")
 document.getElementById("applyodbtn").addEventListener("click",(event)=>{
     event.preventDefault();
-    apply.classList.add("view")
+    apply.classList.add("view") 
 })
 
 //view status bbar
@@ -20,16 +20,16 @@ document.getElementById("historybtn").addEventListener("click",(event)=>{
 })
 
 //submit od
-const submitod=document.getElementById("applyod")
-document.getElementById("odsubmit").addEventListener("click",(event)=>{
-    event.preventDefault();
-        let studentName=document.getElementById("studentname").value
-        let mentorName=document.getElementById("mentor").value
-        let reason=document.getElementById("reasonforod").value
-        let formdate=document.getElementById("formdate").value
-        let todate=document.getElementById("todate").value
-        let year=document.getElementById("inputGroupSelect01").value
-        let department=document.getElementById("inputGroupSelect02").value 
-    console.log(studentName,mentorName,reason,formdate,todate,year,department)
-    submitod.classList.remove("view")
-})
+// const submitod=document.getElementById("applyod")
+// document.getElementById("odsubmit").addEventListener("click",(event)=>{
+//     event.preventDefault();
+//         let studentName=document.getElementById("studentname").value
+//         let mentorName=document.getElementById("mentor").value
+//         let reason=document.getElementById("reasonforod").value
+//         let formdate=document.getElementById("formdate").value
+//         let todate=document.getElementById("todate").value
+//         let year=document.getElementById("inputGroupSelect01").value
+//         let department=document.getElementById("inputGroupSelect02").value 
+//     console.log(studentName,mentorName,reason,formdate,todate,year,department)
+//     submitod.classList.remove("view")
+// })

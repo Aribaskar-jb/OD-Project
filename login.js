@@ -97,12 +97,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase
                 /* window.loginname=userdataname; */
                 /* window.myVariable = "Hello from file1.js"; */
                 console.log(signinUsername)
-                const usersCollection = collection(db, "currentuser");
-                const userDoc = await addDoc(usersCollection, {
-                  username: signinUsername
-                })
+                // const usersCollection = collection(db, "currentuser");
+                // const userDoc = await addDoc(usersCollection, {
+                //   username: signinUsername
+                // })
                 
                 if(signinpassword==userdatapassword){
+                  document.cookie=[signinUsername,signinpassword]
                   if(signinUsername.includes("mentor")){
                         window.location.href = 'mentor.html'
                     }else if(signinUsername.includes("hod")){
