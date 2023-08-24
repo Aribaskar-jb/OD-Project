@@ -352,17 +352,15 @@
           const todate = document.getElementById("todate").value;
           const studentYear = document.getElementById("studentYear").value;
           const studentDept = document.getElementById("studentDept").value;
+          let odlist = [];
           try {
             const db = getFirestore(app);
             const data = await getDocs(collection(db, "users"));
             data.forEach(async (info) => {
               let dataset = info.data();
-              let login = document.cookie.split(",");
-              const docRef = doc(db, "users", info.id);
-              if (dataset.username == login[0]) {
-                setDoc(docRef, {
-                  username: login[0],
-                  password: login[1],
+              if (dataset.odlist) {
+                odlist = dataset.odlist;
+                odlist.push({
                   StudentName: studentname,
                   RollNo: rollno,
                   Reason: reasonforod,
@@ -373,6 +371,28 @@
                   mentor: "pending",
                   hod: "pending",
                   principal: "pending",
+                });
+              } else {
+                odlist.push({
+                  StudentName: studentname,
+                  RollNo: rollno,
+                  Reason: reasonforod,
+                  OdFrom: fromdate,
+                  To: todate,
+                  CurrentYear: studentYear,
+                  dept: studentDept,
+                  mentor: "pending",
+                  hod: "pending",
+                  principal: "pending",
+                });
+              }
+              let login = document.cookie.split(",");
+              const docRef = doc(db, "users", info.id);
+              if (dataset.username == login[0]) {
+                setDoc(docRef, {
+                  username: login[0],
+                  password: login[1],
+                  odlist: odlist,
                 })
                   .then(() => {
                     alert("yes");
