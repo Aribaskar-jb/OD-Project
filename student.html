@@ -164,7 +164,7 @@
         Apply For Od
       </button>
     </div>
-    <form id="contents">
+    <form id="contents" id="form">
       <div
         id="applyod"
         class="login-card card w-75 mb-3 shadow p-3 mb-5 bg-body-tertiary rounded"
@@ -247,7 +247,7 @@
             </div>
           </div>
           <div class="d-grid col-6 mx-auto">
-            <button id="odsubmit" class="btn btn-primary" type="button">
+            <button id="odsubmit" class="btn btn-primary" type="submit" onclick ="data(event)">
               Apply OD
             </button>
           </div>
@@ -264,7 +264,7 @@
           id="statusbar"
         >
           <div class="card-body">
-            <table class="table">
+            <table class="table" id="table">
               <thead>
                 <tr>
                   <th scope="col">Mentor</th>
@@ -272,12 +272,7 @@
                   <th scope="col">Principal</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Pending</td>
-                  <td>Pending</td>
-                  <td>Pending</td>
-                </tr>
+              <tbody id="tbody">
               </tbody>
             </table>
           </div>
@@ -408,6 +403,19 @@
             console.log("Upload error:", error);
           }
         });
+
+
+    function data(event){
+    event.preventDefault();
+    var table=document.getElementById("tbody");
+    let temp=`
+    <tr>
+    <td id="mencho">pending</td>
+    <td id="hodcho">pending</td>
+    <td id="princho">pending</td>
+    </tr>`
+    table.innerHTML+=`${temp}`;
+    }
     </script>
   </body>
 </html>
