@@ -164,7 +164,7 @@
         Apply For Od
       </button>
     </div>
-    <form id="contents">
+    <form id="contents" id="form">
       <div
         id="applyod"
         class="login-card card w-75 mb-3 shadow p-3 mb-5 bg-body-tertiary rounded"
@@ -208,7 +208,7 @@
                 <label class="input-group-text" for="fromdate"
                   >From Date:</label
                 >
-                <input id="fromdate" type="date" class="form-control" />
+                <input id="fromdate" type="date" class="form-control" name="fromdate"/>
               </div>
             </div>
             <div class="col">
@@ -233,7 +233,7 @@
             </div>
           </div>
           <div class="d-grid col-6 mx-auto">
-            <button id="odsubmit" class="btn btn-primary" type="button">
+            <button id="odsubmit" class="btn btn-primary" type="submit" onclick ="data(event)">
               Apply OD
             </button>
           </div>
@@ -250,7 +250,7 @@
           id="statusbar"
         >
           <div class="card-body">
-            <table class="table">
+            <table class="table" id="table">
               <thead>
                 <tr>
                   <th scope="col">Mentor</th>
@@ -258,12 +258,7 @@
                   <th scope="col">Principal</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Pending</td>
-                  <td>Pending</td>
-                  <td>Pending</td>
-                </tr>
+              <tbody id="tbody">
               </tbody>
             </table>
           </div>
@@ -396,6 +391,62 @@
             console.log("Upload error:", error);
           }
         });
+
+
+    function data(event){
+    event.preventDefault();
+    var table=document.getElementById("tbody");
+    let temp=`
+    <tr>
+    <td id="mencho">pending</td>
+    <td id="hodcho">pending</td>
+    <td id="princho">pending</td>
+    </tr>`
+    table.innerHTML+=`${temp}`;
+    }
+
+/* From date to to date disable past day */
+
+function getTodayDate() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = (now.getMonth() + 1).toString().padStart(2, '0');
+      const day = now.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    // Calculate the maximum "to" date based on the "from" date
+    function getMaxToDate(fromDate) {
+      const maxDate = new Date(fromDate);
+      maxDate.setDate(maxDate.getDate() + 35);
+      const year = maxDate.getFullYear();
+      const month = (maxDate.getMonth() + 1).toString().padStart(2, '0');
+      const day = maxDate.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    const fromDateInput = document.getElementById('fromdate');
+    const toDateInput = document.getElementById('todate');
+
+    // Set the default value of the "from" date input to today's date
+    fromDateInput.value = getTodayDate();
+    fromDateInput.min = getTodayDate();
+
+    // Initialize the "to" date input's attributes based on the "from" date
+    toDateInput.value = getTodayDate();
+    toDateInput.min = getTodayDate();
+    toDateInput.max = getMaxToDate(fromDateInput.value);
+
+    // Update the "to" date input's attributes when the "from" date changes
+    fromDateInput.addEventListener('change', function() {
+      toDateInput.min = fromDateInput.value;
+      toDateInput.max = getMaxToDate(fromDateInput.value);
+      if (toDateInput.value < fromDateInput.value) {
+        toDateInput.value = fromDateInput.value;
+      }
+    });
+
+
     </script>
   </body>
 </html>

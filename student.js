@@ -59,6 +59,18 @@ document.getElementById("historybtn").addEventListener("click",(event)=>{
     history.classList.add("view")
 })
 
+function data(event){
+    event.preventDefault();
+    var table=document.getElementById("tbody");
+    let temp=`
+    <tr>
+    <td>pending</td>
+    <td>pending</td>
+    <td>pending</td>
+    </tr>`
+    table.innerHTML+=`${temp}`;
+}
+
 //submit od
 // const submitod=document.getElementById("applyod")
 // document.getElementById("odsubmit").addEventListener("click",(event)=>{
