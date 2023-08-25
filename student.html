@@ -353,37 +353,37 @@
             const data = await getDocs(collection(db, "users"));
             data.forEach(async (info) => {
               let dataset = info.data();
-              if (dataset.odlist) {
-                odlist = dataset.odlist;
-                odlist.push({
-                  StudentName: studentname,
-                  RollNo: rollno,
-                  Reason: reasonforod,
-                  OdFrom: fromdate,
-                  To: todate,
-                  CurrentYear: studentYear,
-                  dept: studentDept,
-                  mentor: "pending",
-                  hod: "pending",
-                  principal: "pending",
-                });
-              } else {
-                odlist.push({
-                  StudentName: studentname,
-                  RollNo: rollno,
-                  Reason: reasonforod,
-                  OdFrom: fromdate,
-                  To: todate,
-                  CurrentYear: studentYear,
-                  dept: studentDept,
-                  mentor: "pending",
-                  hod: "pending",
-                  principal: "pending",
-                });
-              }
               let login = document.cookie.split(",");
               const docRef = doc(db, "users", info.id);
               if (dataset.username == login[0]) {
+                if (dataset.odlist) {
+                  odlist = dataset.odlist;
+                  odlist.push({
+                    StudentName: studentname,
+                    RollNo: rollno,
+                    Reason: reasonforod,
+                    OdFrom: fromdate,
+                    To: todate,
+                    CurrentYear: studentYear,
+                    dept: studentDept,
+                    mentor: "pending",
+                    hod: "pending",
+                    principal: "pending",
+                  });
+                } else {
+                  odlist.push({
+                    StudentName: studentname,
+                    RollNo: rollno,
+                    Reason: reasonforod,
+                    OdFrom: fromdate,
+                    To: todate,
+                    CurrentYear: studentYear,
+                    dept: studentDept,
+                    mentor: "pending",
+                    hod: "pending",
+                    principal: "pending",
+                  });
+                }
                 setDoc(docRef, {
                   username: login[0],
                   password: login[1],
@@ -391,9 +391,11 @@
                 })
                   .then(() => {
                     alert("yes");
+                    odlist = [];
                   })
                   .catch((error) => {
                     console.log(error);
+                    odlist = [];
                   });
               }
             });
