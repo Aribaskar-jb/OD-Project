@@ -3,7 +3,47 @@ const apply=document.getElementById("applyod")
 document.getElementById("applyodbtn").addEventListener("click",(event)=>{
     event.preventDefault();
     apply.classList.add("view") 
-})
+    let login = document.cookie.split(",");
+    document.getElementById("rollno").value = login[0].slice(-6);
+    document.getElementById("rollno").disabled = true;
+          if(login[0].includes("cs")){
+               department="CSE"
+            }else if(login[0].includes("it")){
+                department="IT"
+            }else if(login[0].includes("ai")){
+                department="AIDS"
+            }
+            else if(login[0].includes("ec")){
+                department="ECE"
+            }
+            else if(login[0].includes("me")){
+                department="MECH"
+            }
+            else if(login[0].includes("cb")){
+                department="CSBS"
+            }               
+     document.getElementById("dept").value=department;
+     document.getElementById("dept").disabled=true;
+
+     let curyear=new Date().getFullYear().toString().slice(-2)
+     let month = new Date().getMonth()+1
+     let joinyear = login[0].slice(-6,-4)
+     let years=curyear-joinyear;
+     if(month>=7 && years < 1 || month<7 && years<2){
+        pursuing="1st"
+     }else if(month>=7 && years<2 || month<7 &&  years<3){
+         pursuing="2nd"
+     }else if(month>=7 &&  years<3 || month<7 &&  years<4){
+         pursuing="3rd"
+     }
+     else if(month>=7 &&  years<4 || month<7 &&  years<5){
+         pursuing="4th"
+     }
+     alert(pursuing)
+     document.getElementById("year").value=pursuing; 
+     document.getElementById("year").disabled=true;
+}
+)
 
 //view status bbar
 const statusbar=document.getElementById("statusbar")
