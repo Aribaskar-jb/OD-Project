@@ -2,75 +2,30 @@
 const apply=document.getElementById("applyod")
 document.getElementById("applyodbtn").addEventListener("click",(event)=>{
     event.preventDefault();
-    apply.classList.add("view") 
-    let login = document.cookie.split(",");
-    document.getElementById("rollno").value = login[0].slice(-6);
-    document.getElementById("rollno").disabled = true;
-          if(login[0].includes("cs")){
-               department="CSE"
-            }else if(login[0].includes("it")){
-                department="IT"
-            }else if(login[0].includes("ai")){
-                department="AIDS"
-            }
-            else if(login[0].includes("ec")){
-                department="ECE"
-            }
-            else if(login[0].includes("me")){
-                department="MECH"
-            }
-            else if(login[0].includes("cb")){
-                department="CSBS"
-            }               
-     document.getElementById("dept").value=department;
-     document.getElementById("dept").disabled=true;
-
-     let curyear=new Date().getFullYear().toString().slice(-2)
-     let month = new Date().getMonth()+1
-     let joinyear = login[0].slice(-6,-4)
-     let years=curyear-joinyear;
-     if(month>=7 && years < 1 || month<7 && years<2){
-        pursuing="1st"
-     }else if(month>=7 && years<2 || month<7 &&  years<3){
-         pursuing="2nd"
-     }else if(month>=7 &&  years<3 || month<7 &&  years<4){
-         pursuing="3rd"
-     }
-     else if(month>=7 &&  years<4 || month<7 &&  years<5){
-         pursuing="4th"
-     }
-     alert(pursuing)
-     document.getElementById("year").value=pursuing; 
-     document.getElementById("year").disabled=true;
-}
-)
+    apply.classList.toggle("view") 
+})
 
 //view status bbar
 const statusbar=document.getElementById("statusbar")
 document.getElementById("statusbtn").addEventListener("click",(event)=>{
     event.preventDefault();
-    statusbar.classList.add("view")
+    statusbar.classList.toggle("view")
 })
 
 //view history 
 const history=document.getElementById("history")
 document.getElementById("historybtn").addEventListener("click",(event)=>{
     event.preventDefault();
-    history.classList.add("view")
+    history.classList.toggle("view")
 })
 
-function data(event){
-    event.preventDefault();
-    var table=document.getElementById("tbody");
-    let temp=`
-    <tr>
-    <td>pending</td>
-    <td>pending</td>
-    <td>pending</td>
-    </tr>`
-    table.innerHTML+=`${temp}`;
-}
-
+const profile=document.getElementById("profilebtn")
+profile.addEventListener("click",(event)=>{
+    event.preventDefault()
+    let loginusername=document.cookie.split(",");
+    let userloginname=loginusername[0]
+    document.querySelector(".text-body-emphasis.h4").innerText=userloginname
+})
 //submit od
 // const submitod=document.getElementById("applyod")
 // document.getElementById("odsubmit").addEventListener("click",(event)=>{
@@ -85,3 +40,42 @@ function data(event){
 //     console.log(studentName,mentorName,reason,formdate,todate,year,department)
 //     submitod.classList.remove("view")
 // })
+
+// document
+// .getElementById("historybtn")
+// .addEventListener("click", async (event) => {
+//   event.preventDefault();
+//   try {
+//     data.forEach(async (info) => {
+//       let dataset = info.data();
+//       let login = document.cookie.split(",");
+//       const docRef = doc(db, "users", info.id);
+//       if (dataset.username == login[0]) {
+//       let odlist = dataset.odlist;
+//       for (const odRequest of odlist) {
+//       // Access the "mentor" property within the current OD request object
+//       if(odRequest.mentor!="pending" && odRequest.hod!="pending" && odRequest.principal!="pending"){
+//         const reason = odRequest.Reason;
+//       const date = odRequest.OdFrom;
+//       const todate = odRequest.To;
+//       const principalstatus = odRequest.principal;
+
+//       var table=document.getElementById("odHistory");
+//       let temp=`
+//       <tr>
+//       <td id="mencho">${reason}</td>
+//       <td id="hodcho">${date}</td>
+//       <td id="hodcho">${todate}</td>
+//       <td id="princho">${principalstatus}</td>
+//       </tr>`
+//       table.innerHTML+=temp;
+//       console.log("Mentor Status:", reason);
+//       }
+      
+//     }
+//     }})
+  
+// }catch (error) {
+//     console.log("Upload error:", error);
+//   }
+// },{once:true});

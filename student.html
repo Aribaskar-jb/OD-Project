@@ -102,6 +102,13 @@
         );
         color: white;
       }
+      #myChip{
+            font-weight: 600;
+            width:130px;
+            border-radius: 10px;
+            text-align: center;
+        }
+      
     </style>
   </head>
   <body>
@@ -140,7 +147,7 @@
           <span>Profile</span>
         </button>
         <button id="logoutbtn" class="navbar-toggler" type="button">
-          <span style="font-weight: 400">Logout</span>
+          <span style="font-weight: 400"  onclick="window.location.href='login.html'">Logout</span>
         </button>
       </div>
     </nav>
@@ -164,7 +171,7 @@
         Apply For Od
       </button>
     </div>
-    <form id="contents" id="form">
+    <form id="contents">
       <div
         id="applyod"
         class="login-card card w-75 mb-3 shadow p-3 mb-5 bg-body-tertiary rounded"
@@ -208,7 +215,7 @@
                 <label class="input-group-text" for="fromdate"
                   >From Date:</label
                 >
-                <input id="fromdate" type="date" class="form-control" name="fromdate"/>
+                <input id="fromdate" type="date" class="form-control" />
               </div>
             </div>
             <div class="col">
@@ -222,18 +229,32 @@
             <div class="col">
               <div class="input-group mb-4">
                 <label class="input-group-text" for="studentYear">Year</label>
-                <input type="text" id="year">
+                <select class="form-select" id="studentYear">
+                  <option value="1">1st Year</option>
+                  <option value="2">2nd Year</option>
+                  <option value="3">3rd Year</option>
+                  <option value="4">4th Year</option>
+                </select>
               </div>
             </div>
             <div class="col">
               <div class="input-group mb-4">
-                <label class="input-group-text" for="studentDept">Department</label>
-                <input type="text" id="dept">
+                <label class="input-group-text" for="studentDept"
+                  >Department</label
+                >
+                <select class="form-select" id="studentDept">
+                  <option value="cse">CSE</option>
+                  <option value="it">IT</option>
+                  <option value="ece">ECE</option>
+                  <option value="aids">AIDS</option>
+                  <option value="csbs">CSBS</option>
+                  <option value="mech">MECH</option>
+                </select>
               </div>
             </div>
           </div>
           <div class="d-grid col-6 mx-auto">
-            <button id="odsubmit" class="btn btn-primary" type="submit" onclick ="data(event)">
+            <button id="odsubmit" class="btn btn-primary" type="button">
               Apply OD
             </button>
           </div>
@@ -250,15 +271,16 @@
           id="statusbar"
         >
           <div class="card-body">
-            <table class="table" id="table">
+            <table class="table">
               <thead>
                 <tr>
+                  <th scope="col">Reason</th>
                   <th scope="col">Mentor</th>
                   <th scope="col">Hod</th>
                   <th scope="col">Principal</th>
                 </tr>
               </thead>
-              <tbody id="tbody">
+              <tbody id="odStatus">
               </tbody>
             </table>
           </div>
@@ -280,11 +302,12 @@
             <thead>
               <tr>
                 <th scope="col">Reason For Od</th>
-                <th scope="col">From-To Date</th>
-                <th scope="col">Year & Sec</th>
+                <th scope="col">Mentor</th>
+                <th scope="col">HOD</th>
+                <th scope="col">PRINCIPAL</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="odHistory"></tbody>
           </table>
         </div>
       </div>
@@ -321,6 +344,8 @@
       const analytics = getAnalytics(app);
       const auth = getAuth();
 
+      const db = getFirestore(app);
+      const data = await getDocs(collection(db, "users"));
       document
         .getElementById("odsubmit")
         .addEventListener("click", async (event) => {
@@ -334,13 +359,11 @@
           const studentYear = document.getElementById("studentYear").value;
           const studentDept = document.getElementById("studentDept").value;
           let odlist = [];
+          let login = document.cookie.split(",");
           try {
-            const db = getFirestore(app);
-            const data = await getDocs(collection(db, "users"));
             data.forEach(async (info) => {
-              let dataset = info.data();
-              let login = document.cookie.split(",");
-              const docRef = doc(db, "users", info.id);
+                let dataset = info.data();
+                const docRef = doc(db, "users", info.id);
               if (dataset.username == login[0]) {
                 if (dataset.odlist) {
                   odlist = dataset.odlist;
@@ -378,6 +401,7 @@
                   .then(() => {
                     alert("yes");
                     odlist = [];
+                    location.reload();
                   })
                   .catch((error) => {
                     console.log(error);
@@ -392,60 +416,110 @@
           }
         });
 
+        //For Viewing Status of the Od
+        document
+        .getElementById("statusbtn")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          try {
+    data.forEach(async (info) => {
+      let dataset = info.data();
+      let login = document.cookie.split(",");
+      const docRef = doc(db, "users", info.id);
+      if (dataset.username == login[0]) {
+        let odlist = dataset.odlist;
+        for (const odRequest of odlist) {
+          if((odRequest.mentor!="rejected" && odRequest.hod!="rejected" && odRequest.principal!="rejected") &&(odRequest.mentor=="pending" || odRequest.hod=="pending" || odRequest.principal=="pending" )){
+            const reason = odRequest.Reason;
+          const mentorStatus = odRequest.mentor;
+          const hodstatus = odRequest.hod;
+          const principalstatus = odRequest.principal;
 
-    function data(event){
-    event.preventDefault();
-    var table=document.getElementById("tbody");
-    let temp=`
-    <tr>
-    <td id="mencho">pending</td>
-    <td id="hodcho">pending</td>
-    <td id="princho">pending</td>
-    </tr>`
-    table.innerHTML+=`${temp}`;
-    }
+          var table = document.getElementById("odStatus");
+          let temp = `
+            <tr>
+              <td id="reason">${reason}</td>
+              <td id="mencho"><div class="chip" id="myChip">${mentorStatus}</div></td>
+              <td id="hodcho"><div class="chip" id="myChip">${hodstatus}</div></td>
+              <td id="princho"><div class="chip" id="myChip">${principalstatus}</div></td>
+            </tr>`;
+          table.innerHTML += temp;
+          console.log("Mentor Status:", reason);
+          }
+          
+        }
+      }
+      })
+      const chips = document.querySelectorAll(".chip");
+    chips.forEach((chip) => {
+      if (chip.innerText === "accepted") {
+        chip.style.backgroundColor = "rgb(0, 192, 0)";
+        chip.style.color = "white";
+      } else if (chip.innerText === "rejected") {
+        chip.style.backgroundColor = "rgb(255, 0, 0)";
+        chip.style.color = "white";
+      }else{
+        chip.style.backgroundColor = "rgb( 150, 150, 150)";
+        chip.style.color = "white";
+      }
+    });
+      }catch (error) {
+            console.log("Upload error:", error);
+          }
+    },{once:true});
+    
 
-/* From date to to date disable past day */
+    //History
+    document.getElementById("historybtn").addEventListener("click", async (event) => {
+  event.preventDefault();
+  try {
+    data.forEach(async (info) => {
+      let dataset = info.data();
+      let login = document.cookie.split(",");
+      const docRef = doc(db, "users", info.id);
+      if (dataset.username == login[0]) {
+        let odlist = dataset.odlist;
+        for (const odRequest of odlist) {
+          if((odRequest.mentor=="accepted" && odRequest.hod=="accepted" && odRequest.principal=="accepted") || (odRequest.mentor=="rejected" || odRequest.hod=="rejected" || odRequest.principal=="rejected")){
+            const reason = odRequest.Reason;
+          const date = odRequest.OdFrom;
+          const todate = odRequest.To;
+          const mentorStatus = odRequest.mentor;
+          const hodstatus = odRequest.hod;
+          const principalstatus = odRequest.principal;
 
-function getTodayDate() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = (now.getMonth() + 1).toString().padStart(2, '0');
-      const day = now.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    // Calculate the maximum "to" date based on the "from" date
-    function getMaxToDate(fromDate) {
-      const maxDate = new Date(fromDate);
-      maxDate.setDate(maxDate.getDate() + 35);
-      const year = maxDate.getFullYear();
-      const month = (maxDate.getMonth() + 1).toString().padStart(2, '0');
-      const day = maxDate.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    const fromDateInput = document.getElementById('fromdate');
-    const toDateInput = document.getElementById('todate');
-
-    // Set the default value of the "from" date input to today's date
-    fromDateInput.value = getTodayDate();
-    fromDateInput.min = getTodayDate();
-
-    // Initialize the "to" date input's attributes based on the "from" date
-    toDateInput.value = getTodayDate();
-    toDateInput.min = getTodayDate();
-    toDateInput.max = getMaxToDate(fromDateInput.value);
-
-    // Update the "to" date input's attributes when the "from" date changes
-    fromDateInput.addEventListener('change', function() {
-      toDateInput.min = fromDateInput.value;
-      toDateInput.max = getMaxToDate(fromDateInput.value);
-      if (toDateInput.value < fromDateInput.value) {
-        toDateInput.value = fromDateInput.value;
+          var table = document.getElementById("odHistory");
+          let temp = `
+            <tr>
+              <td id="reason">${reason}</td>
+              <td id="mencho"><div class="chip" id="myChip">${mentorStatus}</div></td>
+              <td id="hodcho"><div class="chip" id="myChip">${hodstatus}</div></td>
+              <td id="princho"><div class="chip" id="myChip">${principalstatus}</div></td>
+            </tr>`;
+          table.innerHTML += temp;
+          console.log("Mentor Status:", reason);
+          }
+          // Access the "mentor" property within the current OD request object
+          
+        }
       }
     });
 
+    
+    const chips = document.querySelectorAll(".chip");
+    chips.forEach((chip) => {
+      if (chip.innerText === "accepted") {
+        chip.style.backgroundColor = "rgb(0, 192, 0)";
+        chip.style.color = "white";
+      } else if (chip.innerText === "rejected") {
+        chip.style.backgroundColor = "rgb(255, 0, 0)";
+        chip.style.color = "white";
+      }
+    });
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}, { once: true });
 
     </script>
   </body>
