@@ -47,7 +47,7 @@
         <div class="bg p-4" >
           <h5 class="text-body-emphasis h4"><span><svg style="position:relative; bottom:4px; margin-right:10px;" xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
               <path  d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-            </svg></span>HOD</h5>
+            </svg></span></h5>
         </div>
       </div>
       <nav class="navbar bg">
@@ -298,6 +298,14 @@
     console.log("retrieve error:", error);
   }
 });
+
+const profile=document.getElementById("profilebtn")
+profile.addEventListener("click",(event)=>{
+    event.preventDefault()
+    let loginusername=document.cookie.split(",");
+    let userloginname=loginusername[0]
+    document.querySelector(".text-body-emphasis.h4").innerText=userloginname
+})  
     </script>
 </body>
 </html>

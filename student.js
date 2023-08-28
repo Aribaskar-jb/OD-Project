@@ -19,6 +19,13 @@ document.getElementById("historybtn").addEventListener("click",(event)=>{
     history.classList.toggle("view")
 })
 
+const profile=document.getElementById("profilebtn")
+profile.addEventListener("click",(event)=>{
+    event.preventDefault()
+    let loginusername=document.cookie.split(",");
+    let userloginname=loginusername[0]
+    document.querySelector(".text-body-emphasis.h4").innerText=userloginname
+})
 //submit od
 // const submitod=document.getElementById("applyod")
 // document.getElementById("odsubmit").addEventListener("click",(event)=>{
