@@ -93,8 +93,12 @@
               getFirestore,
               collection,
               addDoc,
+              doc,
               getDocs,
             } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
+            import { getDoc } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
+            import {setDoc } from "https://www.gstatic.com/firebasejs/9.0.1/firebase-firestore.js";
+
             const firebaseConfig = {
               apiKey: "AIzaSyCb5rHQgaeYJgHFapU_KkpSobPoWCezFhA",
               authDomain: "od-project-b00da.firebaseapp.com",
@@ -109,37 +113,191 @@
             const analytics = getAnalytics(app);
             const auth = getAuth();
             
+            let reqtable=document.getElementById("studentReq")
             
-            const fetchData = async (event) => {
-              try {
-                const db=getFirestore(app);
-                const data = await getDocs(collection(db, "mentor cse"));
-                let bodyInsert=document.getElementById("studentReq")
-                data.forEach((doc) => {
-                  let data=doc.data()
-                  let studentname=data.StudentName
-                  let rollNo=data.RollNo 
-                  let odReason=data.Reason 
-                  let fromDate=data.OdFrom
-                  var temp=`
-                  <tr>
-                      <td>${studentname}</td>
-                      <td>${rollNo}</td>
-                      <td>${odReason}</td>
-                      <td>${fromDate}</td>
-                      <td>
-                          <button id="accept" class="btn btn-outline-primary p-1">Accept</button>
-                          <button class="btn btn-outline-primary p-1">Reject</button>
-                      </td>
-                  </tr>
-                  `
-                  bodyInsert.innerHTML+=temp;
-                  });
-               } catch (error) {
-            console.log("retrieve error:", error);
+            
+            
+            window.addEventListener('load', async (event) => {
+  try {
+    const db = getFirestore(app);
+    const data = await getDocs(collection(db, "users"));
+    let bodyInsert = document.getElementById("studentReq");
+
+    let login = document.cookie.split(",");
+    let loginusername=login[0].toLocaleUpperCase()
+    if(loginusername.includes("CSE")){
+        var reqDept="cse"
+    }else if(loginusername.includes("IT")){
+        var reqDept="it"
+    }else if(loginusername.includes("ECE")){
+        var reqDept="ece"
+    }else if(loginusername.includes("AIDS")){
+        var reqDept="aids"
+    }else if(loginusername.includes("MECH")){
+        var reqDept="mech"
+    }else if(loginusername.includes("CSBS")){
+        var reqDept="csbs"
+    }
+
+    data.forEach(async (info) => {
+      let dataset = info.data();
+
+      // Assuming your Firestore collection is named "odlist"
+      let odlist = dataset.odlist;
+      console.log(odlist);
+
+      for (const odRequest of odlist) {
+        if (odRequest.mentor == "accepted" && odRequest.hod=="pending" && odRequest.dept==reqDept) {
+          const rollno = odRequest.RollNo;
+          const name = odRequest.StudentName;
+          const subject = odRequest.Reason;
+          const fromdate = odRequest.OdFrom;
+          const todate = odRequest.To;
+          const docid = info.id; // Use info.id for the document ID
+
+          // Use unique class names for the buttons
+          let temp = `<tr>
+            <td>${name}</td>
+            <td>${rollno}</td>
+            <td>${subject}</td>
+            <td>${fromdate} to ${todate}</td>
+            <td>
+              <button class="btn-outline-success btn accept" data-id="${docid}">Accept</button>
+              <button class="btn-outline-danger btn reject" data-id="${docid}">Reject</button>
+            </td>
+          </tr>`;
+          bodyInsert.innerHTML += temp;
+        }
+      }
+    });
+
+    const studentReq = document.getElementById("studentReq");
+
+    studentReq.addEventListener('click', async function (event) {
+      const target = event.target;
+
+      // Check if the clicked element is a button with the class "accept"
+      if (target.classList.contains('accept')) {
+        // Get the data-id attribute value for the specific button clicked
+        const reqid = target.getAttribute('data-id');
+        const parentRow = target.closest('tr');
+        const tablesubject = parentRow.cells[2].textContent;
+        const tabledate=parentRow.cells[3].textContent;
+
+        console.log('Accepted ID:', reqid);
+
+        // Now, you can use the reqid to retrieve data from Firestore and update the 'mentor' value to 'accepted'
+        try {
+          const docRef = doc(db, "users", reqid);
+          const docSnapshot = await getDoc(docRef);
+          console.log(docSnapshot);
+
+          if (docSnapshot.exists()) {
+            // Document exists, retrieve its data
+            const data = docSnapshot.data();
+            let name = data.username;
+            let password = data.password;
+            let odlist = data.odlist;
+
+            const updatedOdlist = [];
+
+            for (const odRequest of odlist) {
+              const rollno = odRequest.RollNo;
+              const name = odRequest.StudentName;
+              const subject = odRequest.Reason;
+              const fromdate = odRequest.OdFrom;
+              const todate = odRequest.To;
+
+              // Check if the subject matches the given value
+              if (subject === tablesubject && tabledate==`${fromdate} to ${todate}`) {
+                // If the subject matches, update the 'mentor' value to 'accepted'
+                odRequest.mentor = "accepted";
+                odRequest.hod="accepted"
+              }
+
+              // Push the modified or unmodified odRequest into the updatedOdlist array
+              updatedOdlist.push(odRequest);
+            }
+
+            // Now 'updatedOdlist' contains the modified 'odlist' with 'mentor' values updated as needed.
+            console.log(updatedOdlist);
+
+            // Update the Firestore document with the modified 'odlist'
+            await setDoc(docRef, { username: name, password: password, odlist: updatedOdlist }, { merge: true });
+            console.log('Document updated successfully');
+            parentRow.remove()
+
+          } else {
+            console.log('Document does not exist.');
           }
-        };
-        fetchData();
+        } catch (error) {
+          console.error('Error retrieving or updating document:', error);
+        }
+      } else if (target.classList.contains('reject')) {
+        // Get the data-id attribute value for the specific button clicked
+        const reqid = target.getAttribute('data-id');
+        const parentRow = target.closest('tr');
+        const tablesubject = parentRow.cells[2].textContent;
+        const tabledate=parentRow.cells[3].textContent;
+
+        console.log('Rejected ID:', reqid);
+
+        // Now, you can use the reqid to retrieve data from Firestore and update the 'mentor' value to 'reject'
+        try {
+          const docRef = doc(db, "users", reqid);
+          const docSnapshot = await getDoc(docRef);
+          console.log(docSnapshot);
+
+          if (docSnapshot.exists()) {
+            // Document exists, retrieve its data
+            const data = docSnapshot.data();
+            let name = data.username;
+            let password = data.password;
+            let odlist = data.odlist;
+
+            const updatedOdlist = [];
+
+            for (const odRequest of odlist) {
+              const rollno = odRequest.RollNo;
+              const name = odRequest.StudentName;
+              const subject = odRequest.Reason;
+              const fromdate = odRequest.OdFrom;
+              const todate = odRequest.To;
+
+              // Check if the subject matches the given value
+              if (subject === tablesubject && tabledate==`${fromdate} to ${todate}`) {
+                // If the subject matches, update the 'mentor' value to 'rejected'
+                odRequest.mentor = "rejected";
+                odRequest.hod="rejected"
+                odRequest.principal="rejected by hod"
+              }
+
+              // Push the modified or unmodified odRequest into the updatedOdlist array
+              updatedOdlist.push(odRequest);
+            }
+
+            // Now 'updatedOdlist' contains the modified 'odlist' with 'mentor' values updated as needed.
+            console.log(updatedOdlist);
+
+            // Update the Firestore document with the modified 'odlist'
+            await setDoc(docRef, { username: name, password: password, odlist: updatedOdlist }, { merge: true });
+            console.log('Document updated successfully');
+            parentRow.remove()
+
+          } else {
+            console.log('Document does not exist.');
+          }
+        } catch (error) {
+          console.error('Error retrieving or updating document:', error);
+        }
+      }
+    });
+
+    // Add your code to handle the "Reject" button click here if needed
+  } catch (error) {
+    console.log("retrieve error:", error);
+  }
+});
     </script>
 </body>
 </html>

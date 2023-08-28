@@ -102,6 +102,13 @@
         );
         color: white;
       }
+      #myChip{
+            font-weight: 600;
+            width:130px;
+            border-radius: 10px;
+            text-align: center;
+        }
+      
     </style>
   </head>
   <body>
@@ -140,7 +147,7 @@
           <span>Profile</span>
         </button>
         <button id="logoutbtn" class="navbar-toggler" type="button">
-          <span style="font-weight: 400">Logout</span>
+          <span style="font-weight: 400"  onclick="window.location.href='login.html'">Logout</span>
         </button>
       </div>
     </nav>
@@ -226,7 +233,7 @@
                   <option value="1">1st Year</option>
                   <option value="2">2nd Year</option>
                   <option value="3">3rd Year</option>
-                  <option value="4">4td Year</option>
+                  <option value="4">4th Year</option>
                 </select>
               </div>
             </div>
@@ -267,17 +274,13 @@
             <table class="table">
               <thead>
                 <tr>
+                  <th scope="col">Reason</th>
                   <th scope="col">Mentor</th>
                   <th scope="col">Hod</th>
                   <th scope="col">Principal</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Pending</td>
-                  <td>Pending</td>
-                  <td>Pending</td>
-                </tr>
+              <tbody id="odStatus">
               </tbody>
             </table>
           </div>
@@ -299,11 +302,12 @@
             <thead>
               <tr>
                 <th scope="col">Reason For Od</th>
-                <th scope="col">From-To Date</th>
-                <th scope="col">Year & Sec</th>
+                <th scope="col">Mentor</th>
+                <th scope="col">HOD</th>
+                <th scope="col">PRINCIPAL</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody id="odHistory"></tbody>
           </table>
         </div>
       </div>
@@ -340,6 +344,8 @@
       const analytics = getAnalytics(app);
       const auth = getAuth();
 
+      const db = getFirestore(app);
+      const data = await getDocs(collection(db, "users"));
       document
         .getElementById("odsubmit")
         .addEventListener("click", async (event) => {
@@ -353,13 +359,11 @@
           const studentYear = document.getElementById("studentYear").value;
           const studentDept = document.getElementById("studentDept").value;
           let odlist = [];
+          let login = document.cookie.split(",");
           try {
-            const db = getFirestore(app);
-            const data = await getDocs(collection(db, "users"));
             data.forEach(async (info) => {
-              let dataset = info.data();
-              let login = document.cookie.split(",");
-              const docRef = doc(db, "users", info.id);
+                let dataset = info.data();
+                const docRef = doc(db, "users", info.id);
               if (dataset.username == login[0]) {
                 if (dataset.odlist) {
                   odlist = dataset.odlist;
@@ -397,6 +401,7 @@
                   .then(() => {
                     alert("yes");
                     odlist = [];
+                    location.reload();
                   })
                   .catch((error) => {
                     console.log(error);
@@ -410,6 +415,112 @@
             console.log("Upload error:", error);
           }
         });
+
+        //For Viewing Status of the Od
+        document
+        .getElementById("statusbtn")
+        .addEventListener("click", async (event) => {
+          event.preventDefault();
+          try {
+    data.forEach(async (info) => {
+      let dataset = info.data();
+      let login = document.cookie.split(",");
+      const docRef = doc(db, "users", info.id);
+      if (dataset.username == login[0]) {
+        let odlist = dataset.odlist;
+        for (const odRequest of odlist) {
+          if((odRequest.mentor!="rejected" && odRequest.hod!="rejected" && odRequest.principal!="rejected") &&(odRequest.mentor=="pending" || odRequest.hod=="pending" || odRequest.principal=="pending" )){
+            const reason = odRequest.Reason;
+          const mentorStatus = odRequest.mentor;
+          const hodstatus = odRequest.hod;
+          const principalstatus = odRequest.principal;
+
+          var table = document.getElementById("odStatus");
+          let temp = `
+            <tr>
+              <td id="reason">${reason}</td>
+              <td id="mencho"><div class="chip" id="myChip">${mentorStatus}</div></td>
+              <td id="hodcho"><div class="chip" id="myChip">${hodstatus}</div></td>
+              <td id="princho"><div class="chip" id="myChip">${principalstatus}</div></td>
+            </tr>`;
+          table.innerHTML += temp;
+          console.log("Mentor Status:", reason);
+          }
+          
+        }
+      }
+      })
+      const chips = document.querySelectorAll(".chip");
+    chips.forEach((chip) => {
+      if (chip.innerText === "accepted") {
+        chip.style.backgroundColor = "rgb(0, 192, 0)";
+        chip.style.color = "white";
+      } else if (chip.innerText === "rejected") {
+        chip.style.backgroundColor = "rgb(255, 0, 0)";
+        chip.style.color = "white";
+      }else{
+        chip.style.backgroundColor = "rgb( 150, 150, 150)";
+        chip.style.color = "white";
+      }
+    });
+      }catch (error) {
+            console.log("Upload error:", error);
+          }
+    },{once:true});
+    
+
+    //History
+    document.getElementById("historybtn").addEventListener("click", async (event) => {
+  event.preventDefault();
+  try {
+    data.forEach(async (info) => {
+      let dataset = info.data();
+      let login = document.cookie.split(",");
+      const docRef = doc(db, "users", info.id);
+      if (dataset.username == login[0]) {
+        let odlist = dataset.odlist;
+        for (const odRequest of odlist) {
+          if((odRequest.mentor=="accepted" && odRequest.hod=="accepted" && odRequest.principal=="accepted") || (odRequest.mentor=="rejected" || odRequest.hod=="rejected" || odRequest.principal=="rejected")){
+            const reason = odRequest.Reason;
+          const date = odRequest.OdFrom;
+          const todate = odRequest.To;
+          const mentorStatus = odRequest.mentor;
+          const hodstatus = odRequest.hod;
+          const principalstatus = odRequest.principal;
+
+          var table = document.getElementById("odHistory");
+          let temp = `
+            <tr>
+              <td id="reason">${reason}</td>
+              <td id="mencho"><div class="chip" id="myChip">${mentorStatus}</div></td>
+              <td id="hodcho"><div class="chip" id="myChip">${hodstatus}</div></td>
+              <td id="princho"><div class="chip" id="myChip">${principalstatus}</div></td>
+            </tr>`;
+          table.innerHTML += temp;
+          console.log("Mentor Status:", reason);
+          }
+          // Access the "mentor" property within the current OD request object
+          
+        }
+      }
+    });
+
+    
+    const chips = document.querySelectorAll(".chip");
+    chips.forEach((chip) => {
+      if (chip.innerText === "accepted") {
+        chip.style.backgroundColor = "rgb(0, 192, 0)";
+        chip.style.color = "white";
+      } else if (chip.innerText === "rejected") {
+        chip.style.backgroundColor = "rgb(255, 0, 0)";
+        chip.style.color = "white";
+      }
+    });
+  } catch (error) {
+    console.log("Error:", error);
+  }
+}, { once: true });
+
     </script>
   </body>
 </html>
