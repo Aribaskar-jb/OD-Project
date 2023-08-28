@@ -115,15 +115,20 @@
     <div class="collapse" id="navbarToggleExternalContent" data-bs-theme="dark">
       <div class="bg p-4">
         <h5 class="text-body-emphasis h4">
-          <span ><svg
+          <span
+            ><svg
               style="position: relative; bottom: 4px; margin-right: 10px"
               xmlns="http://www.w3.org/2000/svg"
               width="25"
               height="25"
               fill="currentColor"
               class="bi bi-person-fill"
-              viewBox="0 0 16 16">
-              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/></svg></span>
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
+              /></svg></span
+          >20CSA40
         </h5>
       </div>
     </div>
@@ -355,9 +360,6 @@
           const studentDept = document.getElementById("studentDept").value;
           let odlist = [];
           let login = document.cookie.split(",");
-          const userloginname=document.querySelector(".text-body-emphasis.h4")
-          userloginname.innerText=login[0]
-
           try {
             data.forEach(async (info) => {
                 let dataset = info.data();
@@ -397,7 +399,7 @@
                   odlist: odlist,
                 })
                   .then(() => {
-                    alert("Successfully applied OD");
+                    alert("yes");
                     odlist = [];
                     location.reload();
                   })
