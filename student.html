@@ -358,6 +358,20 @@
           const todate = document.getElementById("todate").value;
           const studentYear = document.getElementById("studentYear").value;
           const studentDept = document.getElementById("studentDept").value;
+
+          if (
+      studentname === "" ||
+      rollno === "" ||
+      reasonforod === "" ||
+      fromdate === "" ||
+      todate === "" ||
+      studentYear === "" ||
+      studentDept === ""
+    ) {
+      alert("Please fill out all the required fields.");
+      return;
+    }
+
           let odlist = [];
           let login = document.cookie.split(",");
           try {
@@ -399,7 +413,7 @@
                   odlist: odlist,
                 })
                   .then(() => {
-                    alert("yes");
+                    alert("OD Successfully applied");
                     odlist = [];
                     location.reload();
                   })
