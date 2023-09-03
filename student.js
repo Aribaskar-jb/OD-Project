@@ -2,6 +2,44 @@ const apply=document.getElementById("applyod")
 document.getElementById("applyodbtn").addEventListener("click",(event)=>{
     event.preventDefault();
     apply.classList.toggle("view") 
+    document.getElementById("rollno").value=username;
+    document.getElementById("rollno").disabled=true;
+   
+    if(username.includes("CS")){
+        department="cse"
+     }else if(username.includes("IT")){
+         department="it"
+     }else if(username.includes("AI")){
+         department="aids"
+     }
+     else if(username.includes("EC")){
+         department="ece"
+     }
+     else if(username.includes("ME")){
+         department="mech"
+     }
+     else if(username.includes("CB")){
+         department="csbs"
+     }               
+document.getElementById("studentDept").value=department;
+document.getElementById("studentDept").disabled=true;
+
+let curyear=new Date().getFullYear().toString().slice(-2)
+     let month = new Date().getMonth()+1
+     let joinyear = username.slice(0,2)
+     let years=curyear-joinyear;
+     if(month>=7 && years < 1 || month<7 && years<2){
+        pursuing="1st"
+     }else if(month>=7 && years<2 || month<7 &&  years<3){
+         pursuing="2nd"
+     }else if(month>=7 &&  years<3 || month<7 &&  years<4){
+         pursuing="3rd"
+     }
+     else if(month>=7 &&  years<4 || month<7 &&  years<5){
+         pursuing="4th"
+     }
+     document.getElementById("studentYear").value=pursuing; 
+     document.getElementById("studentYear").disabled=true;
 })
 
 //view status bbar
@@ -95,3 +133,4 @@ function getUserDetails()
     return JSON.parse(myCookieValue)
 
 }
+let username =  getUserDetails().userName.toUpperCase();
