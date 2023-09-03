@@ -373,12 +373,13 @@
     }
 
           let odlist = [];
-          let login = document.cookie.split(",");
+          // let login = document.cookie.split(",");
+          const userDetails = getUserDetails()
           try {
             data.forEach(async (info) => {
                 let dataset = info.data();
                 const docRef = doc(db, "users", info.id);
-              if (dataset.username == login[0]) {
+              if (dataset.username == userDetails.userName) {
                 if (dataset.odlist) {
                   odlist = dataset.odlist;
                   odlist.push({
@@ -408,8 +409,8 @@
                   });
                 }
                 setDoc(docRef, {
-                  username: login[0],
-                  password: login[1],
+                  username: userDetails.userName,
+                  password: userDetails.password,
                   odlist: odlist,
                 })
                   .then(() => {
@@ -438,9 +439,10 @@
           try {
     data.forEach(async (info) => {
       let dataset = info.data();
-      let login = document.cookie.split(",");
+      // let login = document.cookie.split(",");
+      const userDetails = getUserDetails()
       const docRef = doc(db, "users", info.id);
-      if (dataset.username == login[0]) {
+      if (dataset.username ==userDetails.userName) {
         let odlist = dataset.odlist;
         for (const odRequest of odlist) {
           if((odRequest.mentor!="rejected" && odRequest.hod!="rejected" && odRequest.principal!="rejected") &&(odRequest.mentor=="pending" || odRequest.hod=="pending" || odRequest.principal=="pending" )){
@@ -489,9 +491,10 @@
   try {
     data.forEach(async (info) => {
       let dataset = info.data();
-      let login = document.cookie.split(",");
+      // let login = document.cookie.split(",");
+      const userDetails = getUserDetails()
       const docRef = doc(db, "users", info.id);
-      if (dataset.username == login[0]) {
+      if (dataset.username == userDetails.userName) {
         let odlist = dataset.odlist;
         for (const odRequest of odlist) {
           if((odRequest.mentor=="accepted" && odRequest.hod=="accepted" && odRequest.principal=="accepted") || (odRequest.mentor=="rejected" || odRequest.hod=="rejected" || odRequest.principal=="rejected")){
@@ -535,45 +538,23 @@
   }
 }, { once: true });
 
-    // Get today's date in the format yyyy-mm-dd
-    function getTodayDate() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = (now.getMonth() + 1).toString().padStart(2, '0');
-      const day = now.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    // Calculate the maximum "to" date based on the "from" date
-    function getMaxToDate(fromDate) {
-      const maxDate = new Date(fromDate);
-      maxDate.setDate(maxDate.getDate() + 35);
-      const year = maxDate.getFullYear();
-      const month = (maxDate.getMonth() + 1).toString().padStart(2, '0');
-      const day = maxDate.getDate().toString().padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    const fromDateInput = document.getElementById('fromdate');
-    const toDateInput = document.getElementById('todate');
-
-    // Set the default value of the "from" date input to today's date
-    fromDateInput.value = getTodayDate();
-    fromDateInput.min = getTodayDate();
-
-    // Initialize the "to" date input's attributes based on the "from" date
-    toDateInput.value = getTodayDate();
-    toDateInput.min = getTodayDate();
-    toDateInput.max = getMaxToDate(fromDateInput.value);
-
-    // Update the "to" date input's attributes when the "from" date changes
-    fromDateInput.addEventListener('change', function() {
-      toDateInput.min = fromDateInput.value;
-      toDateInput.max = getMaxToDate(fromDateInput.value);
-      if (toDateInput.value < fromDateInput.value) {
-        toDateInput.value = fromDateInput.value;
+function getUserDetails()
+{
+    var cookies = document.cookie.split(";"); // Split the cookies string into an array
+    var myCookieValue = null;
+    
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.startsWith("myCookie=")) {
+        myCookieValue = cookie.substring("myCookie=".length);
+        break; // Exit the loop once we find the myCookie
       }
-    });
+    }
+
+    return JSON.parse(myCookieValue)
+
+}
+
 
     </script>
   </body>
