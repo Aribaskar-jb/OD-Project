@@ -373,12 +373,13 @@
     }
 
           let odlist = [];
-          let login = document.cookie.split(",");
+          // let login = document.cookie.split(",");
+          const userDetails = getUserDetails()
           try {
             data.forEach(async (info) => {
                 let dataset = info.data();
                 const docRef = doc(db, "users", info.id);
-              if (dataset.username == login[0]) {
+              if (dataset.username == userDetails.userName) {
                 if (dataset.odlist) {
                   odlist = dataset.odlist;
                   odlist.push({
@@ -408,8 +409,8 @@
                   });
                 }
                 setDoc(docRef, {
-                  username: login[0],
-                  password: login[1],
+                  username: userDetails.userName,
+                  password: userDetails.password,
                   odlist: odlist,
                 })
                   .then(() => {
@@ -438,9 +439,10 @@
           try {
     data.forEach(async (info) => {
       let dataset = info.data();
-      let login = document.cookie.split(",");
+      // let login = document.cookie.split(",");
+      const userDetails = getUserDetails()
       const docRef = doc(db, "users", info.id);
-      if (dataset.username == login[0]) {
+      if (dataset.username ==userDetails.userName) {
         let odlist = dataset.odlist;
         for (const odRequest of odlist) {
           if((odRequest.mentor!="rejected" && odRequest.hod!="rejected" && odRequest.principal!="rejected") &&(odRequest.mentor=="pending" || odRequest.hod=="pending" || odRequest.principal=="pending" )){
@@ -489,9 +491,10 @@
   try {
     data.forEach(async (info) => {
       let dataset = info.data();
-      let login = document.cookie.split(",");
+      // let login = document.cookie.split(",");
+      const userDetails = getUserDetails()
       const docRef = doc(db, "users", info.id);
-      if (dataset.username == login[0]) {
+      if (dataset.username == userDetails.userName) {
         let odlist = dataset.odlist;
         for (const odRequest of odlist) {
           if((odRequest.mentor=="accepted" && odRequest.hod=="accepted" && odRequest.principal=="accepted") || (odRequest.mentor=="rejected" || odRequest.hod=="rejected" || odRequest.principal=="rejected")){
@@ -534,6 +537,23 @@
     console.log("Error:", error);
   }
 }, { once: true });
+
+function getUserDetails()
+{
+    var cookies = document.cookie.split(";"); // Split the cookies string into an array
+    var myCookieValue = null;
+    
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.startsWith("myCookie=")) {
+        myCookieValue = cookie.substring("myCookie=".length);
+        break; // Exit the loop once we find the myCookie
+      }
+    }
+
+    return JSON.parse(myCookieValue)
+
+}
 
     </script>
   </body>

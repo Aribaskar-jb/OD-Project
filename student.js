@@ -1,4 +1,3 @@
-//  view od card
 const apply=document.getElementById("applyod")
 document.getElementById("applyodbtn").addEventListener("click",(event)=>{
     event.preventDefault();
@@ -22,9 +21,9 @@ document.getElementById("historybtn").addEventListener("click",(event)=>{
 const profile=document.getElementById("profilebtn")
 profile.addEventListener("click",(event)=>{
     event.preventDefault()
-    let loginusername=document.cookie.split(",");
-    let userloginname=loginusername[0]
-    document.querySelector(".text-body-emphasis.h4").innerText=userloginname
+    const userDetails = getUserDetails()
+    console.log(userDetails)
+    document.querySelector(".text-body-emphasis.h4").innerText=userDetails.userName
 })
 //submit od
 // const submitod=document.getElementById("applyod")
@@ -79,3 +78,20 @@ profile.addEventListener("click",(event)=>{
 //     console.log("Upload error:", error);
 //   }
 // },{once:true});
+
+function getUserDetails()
+{
+    var cookies = document.cookie.split(";"); // Split the cookies string into an array
+    var myCookieValue = null;
+    
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.startsWith("myCookie=")) {
+        myCookieValue = cookie.substring("myCookie=".length);
+        break; // Exit the loop once we find the myCookie
+      }
+    }
+
+    return JSON.parse(myCookieValue)
+
+}

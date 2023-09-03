@@ -103,7 +103,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase
                 // })
                 
                 if(signinpassword==userdatapassword){
-                  document.cookie=[signinUsername,signinpassword]
+                  // document.cookie=[signinUsername,signinpassword]
+                  const userDetails = {
+                    name : signinUsername,
+                    password : signinpassword
+                  }
+
+                  console.log(userDetails)
+                  setCookie(userDetails)
                   if(signinUsername.includes("mentor")){
                         window.location.href = 'mentor.html'
                     }else if(signinUsername.includes("hod")){
@@ -140,3 +147,10 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.1/firebase
           }
         });
         /* export default loginname; */
+
+
+function setCookie(userDetails) {
+  // document.cookie = userDetails.name + "=" + (value || "")  + expires + "; path=/";
+  document.cookie = "myCookie=" + JSON.stringify({userName: userDetails.name, password: userDetails.password});
+
+}
