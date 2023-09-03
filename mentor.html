@@ -122,8 +122,10 @@
     const data = await getDocs(collection(db, "users"));
     let bodyInsert = document.getElementById("studentReq");
 
-    let login = document.cookie.split(",");
-    let loginusername=login[0].toLocaleUpperCase()
+    // let login = document.cookie.split(",");
+    const userDetails = getUserDetails()
+    let loginusername=userDetails.userName.toLocaleUpperCase()
+    console.log(loginusername)
     if(loginusername.includes("CSE")){
         var reqDept="cse"
     }else if(loginusername.includes("IT")){
