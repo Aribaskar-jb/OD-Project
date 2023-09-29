@@ -134,3 +134,42 @@ function getUserDetails()
 
 }
 let username =  getUserDetails().userName.toUpperCase();
+
+function getTodayDate() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  // Calculate the maximum "to" date based on the "from" date
+  function getMaxToDate(fromDate) {
+    const maxDate = new Date(fromDate);
+    maxDate.setDate(maxDate.getDate() + 35);
+    const year = maxDate.getFullYear();
+    const month = (maxDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = maxDate.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  const fromDateInput = document.getElementById('fromdate');
+  const toDateInput = document.getElementById('todate');
+
+  // Set the default value of the "from" date input to today's date
+  fromDateInput.value = getTodayDate();
+  fromDateInput.min = getTodayDate();
+
+  // Initialize the "to" date input's attributes based on the "from" date
+  toDateInput.value = getTodayDate();
+  toDateInput.min = getTodayDate();
+  toDateInput.max = getMaxToDate(fromDateInput.value);
+
+  // Update the "to" date input's attributes when the "from" date changes
+  fromDateInput.addEventListener('change', function() {
+    toDateInput.min = fromDateInput.value;
+    toDateInput.max = getMaxToDate(fromDateInput.value);
+    if (toDateInput.value < fromDateInput.value) {
+      toDateInput.value = fromDateInput.value;
+    }
+  });
